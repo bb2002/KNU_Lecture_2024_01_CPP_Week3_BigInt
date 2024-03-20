@@ -2,6 +2,7 @@
 #include<string>
 
 std::string sum(std::string a, std::string b);
+std::string minus(std::string a, std::string b);
 
 int main() {
     std::string firstNumber, secondNumber;
@@ -13,4 +14,5 @@ int main() {
     std::cin >> secondNumber;
 
     std::cout << "Sum: " << sum(firstNumber, secondNumber) << std::endl;
+    std::cout << "Sub: " << minus(firstNumber, secondNumber) << std::endl;
 }
