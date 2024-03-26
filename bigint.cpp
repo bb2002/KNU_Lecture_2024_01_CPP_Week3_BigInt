@@ -54,45 +54,49 @@ std::string minus(std::string a, std::string b) {
         b = padding(b, a.length() - b.length());
     }
 
+    // a 가 무조건 더 크도록 수정
     bool needMinus = false;
-    for (int i = 0; i < a.length(); ++i) {
-        if (stoi(a[i]) < stoi(b[i])) {
-            std::string tmp = a;
-            a = b;
-            b = tmp;
-            needMinus = true;
-            break;
-        }
+    if (a < b) {
+        std::string tmp = a;
+        a = b;
+        b = tmp;
+        needMinus = true;
     }
 
-    std::string sum = "";
-    bool under = false;
+    int borrow = 0;
+    std::string result = "";
     for (int i = a.length() - 1; i >= 0; --i) {
-        int segmentA = stoi(a[i]) - (under ? 1 : 0);
-        int segmentB = stoi(b[i]);
-        under = false;
-
-        if (segmentA < segmentB) {
-            segmentA += 10;
-            under = true;
+        int digit1 = stoi(a[i]);
+        int digit2 = stoi(b[i]);
+        int diff = digit1 - digit2 - borrow;
+        if (diff < 0) {
+            borrow = 1;
+            diff += 10;
+        } else {
+            borrow = 0;
         }
-
-        sum = std::to_string(segmentA - segmentB) + sum;
+        result = std::to_string(diff) + result;
     }
 
+    // 0 제거
     int remainPadding = 0;
-    for (int i = 0; i < sum.length() - 1; ++i) {
-        if (sum[i] == '0') {
+    for (int i = 0; i < result.length() - 1; ++i) {
+        if (result[i] == '0') {
             remainPadding++;
         } else {
             break;
         }
     }
-    sum = sum.substr(remainPadding, sum.length());
 
-    if (needMinus) {
-        sum = "-" + sum;
+    result = result.substr(remainPadding, result.length());
+    if (result.empty()) {
+        return "0";
     }
 
-    return sum;
+    // 마이너스 처리
+    if (needMinus) {
+        return std::string("-") + result;
+    } else {
+        return result;
+    }
 }
